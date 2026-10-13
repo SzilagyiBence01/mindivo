@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -33,8 +34,12 @@ public class ContentBlock {
     private User author;
 
     // Content elements that make up the lesson
-    @OneToMany(mappedBy = "contentBlock")
-    private List<Content> contents;
+    @OneToMany(
+            mappedBy = "contentBlock",
+            cascade = CascadeType.ALL, // Saving the parent can extend the operation to the children.
+            orphanRemoval = true // "If a child loses their connection to the parent, delete them from the database."
+    )
+    private List<Content> contents = new ArrayList<>();
 
     // Users who liked the post
     @ManyToMany
@@ -43,5 +48,5 @@ public class ContentBlock {
             joinColumns = @JoinColumn(name = "content_block_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> likedBy;
+    private List<User> likedBy = new ArrayList<>();
 }
