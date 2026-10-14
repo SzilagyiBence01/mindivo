@@ -1,8 +1,15 @@
 package mindivo.service;
 
-
-import mindivo.entity.User;
+import mindivo.dto.LoginResponseDto;
+import mindivo.dto.LoginUserDto;
+import mindivo.dto.RegisterUserDto;
+import mindivo.dto.UserResponseDto;
 
 public interface UserService {
-    public User register(User user);
+
+    UserResponseDto register(RegisterUserDto dto);
+
+    LoginResponseDto login(LoginUserDto dto);
+
+    UserResponseDto getAccount(Long userId);
 }

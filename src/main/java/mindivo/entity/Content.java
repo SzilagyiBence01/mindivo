@@ -37,7 +37,7 @@ public class Content {
     private ContentBlock contentBlock;
 
     //
-    //
+    // Different types of content enum
     public enum ContentType{
         TEXT,
         QUIZ,

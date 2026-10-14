@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -28,6 +29,7 @@ public class User {
     @Column(name="user_name", unique = true, nullable = false)
     private String userName;
 
+    // Hashed password
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -46,6 +48,5 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "content_block_id")
     )
-    private List<ContentBlock> savedContentBlocks;
-
+    private List<ContentBlock> savedContentBlocks = new ArrayList<>();
 }

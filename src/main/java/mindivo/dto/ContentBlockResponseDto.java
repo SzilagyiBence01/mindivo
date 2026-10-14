@@ -16,4 +16,7 @@ public class ContentBlockResponseDto {
     private String title;
     private String description;
     private List<ContentResponseDto> contents;
+
+    private Integer likeCount;
+    private Boolean likedByMe;
 }
