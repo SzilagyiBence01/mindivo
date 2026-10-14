@@ -18,6 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
+    //
     // Register
     @PostMapping("/register")
     public UserResponseDto register(
@@ -26,6 +27,7 @@ public class UserController {
         return userService.register(dto);
     }
 
+    //
     // Login
     @PostMapping("/login")
     public LoginResponseDto login(
@@ -34,6 +36,7 @@ public class UserController {
         return userService.login(dto);
     }
 
+    //
     // Get own account
     @GetMapping("/account")
     public UserResponseDto getAccount(

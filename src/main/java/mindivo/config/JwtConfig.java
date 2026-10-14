@@ -14,18 +14,23 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
+// Configures JWT authentication for the application.
 @Configuration
 public class JwtConfig {
 
+    // Creates the secret key used to sign and verify JWT tokens
     @Bean
     public SecretKey jwtSecretKey(
-            @Value("${jwt.secret}") String secret
+            @Value("${jwt.secret}") String secret // currently came from environment variables
     ) {
+        // Decode the Base64 encoded secret into bytes.
         byte[] decodedKey = Base64.getDecoder().decode(secret);
 
+        // Create the secret key using HMAC-SHA256
         return new SecretKeySpec(decodedKey, "HmacSHA256");
     }
 
+    // Creates the encoder used to generate JWT tokens
     @Bean
     public JwtEncoder jwtEncoder(SecretKey jwtSecretKey) {
         return new NimbusJwtEncoder(
@@ -33,6 +38,7 @@ public class JwtConfig {
         );
     }
 
+    // Creates the decoder used to verify JWT tokens.
     @Bean
     public JwtDecoder jwtDecoder(SecretKey jwtSecretKey) {
         return NimbusJwtDecoder

@@ -19,6 +19,8 @@ public class ContentBlockController {
 
     private final ContentBlockService contentBlockService;
 
+    //
+    // Create new Content Block
     @PostMapping
     public ContentBlockResponseDto createContentBlock(
             @RequestBody ContentBlockRequestDto dto,
@@ -30,6 +32,8 @@ public class ContentBlockController {
         return contentBlockService.createContentBlock(dto, userId);
     }
 
+    //
+    // Get every single Content Block
     @GetMapping
     public List<ContentBlockResponseDto> getAllContentBlocks(
             @AuthenticationPrincipal Jwt jwt
@@ -39,6 +43,8 @@ public class ContentBlockController {
         return contentBlockService.getAllContentBlocks(userId);
     }
 
+    //
+    // Get a Content Block by id
     @GetMapping("/{id}")
     public ContentBlockResponseDto getContentBlockById(
             @PathVariable Long id,
@@ -52,6 +58,8 @@ public class ContentBlockController {
         );
     }
 
+    //
+    // Get the user own Content Blocks
     @GetMapping("/account/content-blocks")
     public List<ContentBlockResponseDto> getMyContentBlocks(@AuthenticationPrincipal Jwt jwt) {
         Long userId = Long.valueOf(Objects.requireNonNull(jwt.getSubject()));
@@ -59,6 +67,8 @@ public class ContentBlockController {
         return contentBlockService.getMyContentBlocks(userId);
     }
 
+    //
+    // Update a Content Block
     @PutMapping("/{id}")
     public ContentBlockResponseDto updateContentBlock(
             @PathVariable Long id,
@@ -74,6 +84,8 @@ public class ContentBlockController {
         );
     }
 
+    //
+    // Delete a Content Block
     @DeleteMapping("/{id}")
     public void deleteContentBlock(
             @PathVariable Long id,
@@ -87,6 +99,8 @@ public class ContentBlockController {
         );
     }
 
+    //
+    // Like a Content Block
     @PostMapping("/{id}/like")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void likeContentBlock(
@@ -101,6 +115,8 @@ public class ContentBlockController {
         );
     }
 
+    //
+    // Unlike a Content Block
     @DeleteMapping("/{id}/like")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void unlikeContentBlock(
@@ -115,6 +131,8 @@ public class ContentBlockController {
         );
     }
 
+    //
+    // Save a Content Block
     @PostMapping("/{id}/save")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void saveContentBlock(
@@ -126,6 +144,8 @@ public class ContentBlockController {
         contentBlockService.saveContentBlock(id, userId);
     }
 
+    //
+    // Unsave a Content Block
     @DeleteMapping("/{id}/save")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void unsaveContentBlock(
@@ -137,6 +157,8 @@ public class ContentBlockController {
         contentBlockService.unsaveContentBlock(id, userId);
     }
 
+    //
+    // Get user own saved Content Blocks
     @GetMapping("/account/saved-content-blocks")
     public List<ContentBlockResponseDto> getSavedContentBlocks(
             @AuthenticationPrincipal Jwt jwt

@@ -11,7 +11,6 @@ import mindivo.entity.Content.ContentType;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContentItemDto {
-
     private Long id;
     private ContentType contentType;
     private String contentData;

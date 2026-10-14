@@ -24,10 +24,12 @@ public class ContentBlockServiceImpl implements ContentBlockService {
     private final ContentBlockRepository contentBlockRepository;
     private final UserRepository userRepository;
 
+    //
     // Create new Content Block
     @Override
     public ContentBlockResponseDto createContentBlock(ContentBlockRequestDto dto, Long userId) {
 
+        // Checking if the user existed *Auth*
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found.")
@@ -42,6 +44,7 @@ public class ContentBlockServiceImpl implements ContentBlockService {
         return ContentBlockMapper.toResponse(savedContentBlock, userId);
     }
 
+    //
     // Get all Content Block
     @Override
     public List<ContentBlockResponseDto> getAllContentBlocks(Long userId) {
@@ -58,12 +61,10 @@ public class ContentBlockServiceImpl implements ContentBlockService {
                 .toList();
     }
 
+    //
     // Get a single Content Block by id
     @Override
-    public ContentBlockResponseDto getContentBlockById(
-            Long id,
-            Long userId
-    ) {
+    public ContentBlockResponseDto getContentBlockById(Long id, Long userId) {
 
         ContentBlock contentBlock = contentBlockRepository.findById(id)
                 .orElseThrow(() ->
@@ -76,6 +77,8 @@ public class ContentBlockServiceImpl implements ContentBlockService {
         );
     }
 
+    //
+    // Getting user own Content Blocks
     @Override
     public List<ContentBlockResponseDto> getMyContentBlocks(Long userId) {
 
@@ -90,10 +93,13 @@ public class ContentBlockServiceImpl implements ContentBlockService {
                 .toList();
     }
 
+    //
+    // Update Content Block
     @Transactional
     @Override
     public ContentBlockResponseDto updateContentBlock(Long id, ContentBlockRequestDto dto, Long userId) {
 
+        // Check if the Content Block even existed
         ContentBlock contentBlock = contentBlockRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Content block not found.")
@@ -106,12 +112,11 @@ public class ContentBlockServiceImpl implements ContentBlockService {
             );
         }
 
-        // Title + description update
         ContentBlockMapper.updateEntity(contentBlock, dto);
 
         // Replacing the entire contents list
         contentBlock.getContents().clear();
-
+        //
         if (dto.getContents() != null) {
 
             for (int i = 0; i < dto.getContents().size(); i++) {
@@ -127,15 +132,17 @@ public class ContentBlockServiceImpl implements ContentBlockService {
             }
         }
 
-        ContentBlock savedContentBlock =
-                contentBlockRepository.save(contentBlock);
+        ContentBlock savedContentBlock = contentBlockRepository.save(contentBlock);
 
         return ContentBlockMapper.toResponse(savedContentBlock, userId);
     }
 
+    //
+    // Delete Content Block
     @Override
     public void deleteContentBlock(Long id, Long userId) {
 
+        // Check if the Content Block even existed
         ContentBlock contentBlock = contentBlockRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Content block not found.")
@@ -151,19 +158,24 @@ public class ContentBlockServiceImpl implements ContentBlockService {
         contentBlockRepository.delete(contentBlock);
     }
 
+    //
+    // Like a Content Block
     @Override
     public void likeContentBlock(Long contentBlockId, Long userId) {
 
+        // Check if the Content Block even exist
         ContentBlock contentBlock = contentBlockRepository.findById(contentBlockId)
                 .orElseThrow(() ->
                         new RuntimeException("Content block not found.")
                 );
 
+        // Check user
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found.")
                 );
 
+        // Check if the user is already liked the post
         boolean alreadyLiked = contentBlock.getLikedBy()
                 .stream()
                 .anyMatch(existingUser ->
@@ -178,14 +190,18 @@ public class ContentBlockServiceImpl implements ContentBlockService {
         contentBlockRepository.save(contentBlock);
     }
 
+    //
+    // Unlike Content Block
     @Override
     public void unlikeContentBlock(Long contentBlockId, Long userId) {
 
+        // Check if the Content Block even exist
         ContentBlock contentBlock = contentBlockRepository.findById(contentBlockId)
                 .orElseThrow(() ->
                         new RuntimeException("Content block not found.")
                 );
 
+        // Check user
         userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found.")
@@ -199,25 +215,29 @@ public class ContentBlockServiceImpl implements ContentBlockService {
         contentBlockRepository.save(contentBlock);
     }
 
+    //
+    // Save Content Block for later
     @Override
     public void saveContentBlock(Long contentBlockId, Long userId) {
 
+        // Check if the Content Block even exist
         ContentBlock contentBlock = contentBlockRepository.findById(contentBlockId)
                 .orElseThrow(() ->
                         new RuntimeException("Content block not found.")
                 );
 
+        // Check user
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found.")
                 );
 
+        // Check if the Content Block already saved
         boolean alreadySaved = user.getSavedContentBlocks()
                 .stream()
                 .anyMatch(savedContentBlock ->
                         savedContentBlock.getId().equals(contentBlockId)
                 );
-
         if (!alreadySaved) {
             user.getSavedContentBlocks().add(contentBlock);
         }
@@ -225,9 +245,12 @@ public class ContentBlockServiceImpl implements ContentBlockService {
         userRepository.save(user);
     }
 
+    //
+    // Unsave Content Block
     @Override
     public void unsaveContentBlock(Long contentBlockId, Long userId) {
 
+        // Check user
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found.")
@@ -241,9 +264,12 @@ public class ContentBlockServiceImpl implements ContentBlockService {
         userRepository.save(user);
     }
 
+    //
+    // Getting saved Content Blocks
     @Override
     public List<ContentBlockResponseDto> getSavedContentBlocks(Long userId) {
 
+        // Check user
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found.")

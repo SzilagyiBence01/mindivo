@@ -51,11 +51,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginResponseDto login(LoginUserDto dto) {
 
+        // Check if the username is exist
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() ->
                         new RuntimeException("Invalid email or password.")
                 );
 
+        // Check if the password is correct
         if (!passwordEncoder.matches(
                 dto.getPassword(),
                 user.getPassword()
@@ -76,9 +78,11 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    // Get account
     @Override
     public UserResponseDto getAccount(Long userId) {
 
+        // Check if the id is existed
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found.")
