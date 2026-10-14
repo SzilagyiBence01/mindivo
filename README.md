@@ -4,6 +4,10 @@ Mindivo is an educational platform for creating and studying structured learning
 
 The application allows users to create content blocks containing different types of learning content, such as text, images and quizzes. Users can also like and save content blocks for later use.
 
+<p align="center">
+  <img src="assets/logo.png" alt="Mindivo logo" width="200">
+</p>
+
 ## Current status
 
 🚧 The backend is currently implemented and tested. The frontend is planned.
