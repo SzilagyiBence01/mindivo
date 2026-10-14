@@ -1,0 +1,10 @@
+package mindivo.repository;
+
+import mindivo.entity.ContentBlock;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface ContentBlockRepository extends JpaRepository<ContentBlock, Long> {
+    List<ContentBlock> findByAuthorId(Long authorId);
+}

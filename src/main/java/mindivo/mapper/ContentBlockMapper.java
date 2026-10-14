@@ -50,7 +50,8 @@ public class ContentBlockMapper {
 
     // Converting the content unit back into a response DTO
     public static ContentBlockResponseDto toResponse(
-            ContentBlock contentBlock
+            ContentBlock contentBlock,
+            Long userId
     ) {
         List<Content> contents = contentBlock.getContents() == null
                 ? new ArrayList<>()
@@ -69,11 +70,23 @@ public class ContentBlockMapper {
                 .map(ContentMapper::toResponse)
                 .toList();
 
+        // Number of likes
+        int likeCount = contentBlock.getLikedBy().size();
+
+        // Did the current user like this content block?
+        boolean likedByMe = contentBlock.getLikedBy()
+                .stream()
+                .anyMatch(user ->
+                        user.getId().equals(userId)
+                );
+
         return new ContentBlockResponseDto(
                 contentBlock.getId(),
                 contentBlock.getTitle(),
                 contentBlock.getDescription(),
-                contentDtos
+                contentDtos,
+                likeCount,
+                likedByMe
         );
     }
 }
