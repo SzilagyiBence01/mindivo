@@ -26,7 +26,7 @@ public class JwtService {
                 .subject(userId.toString())
                 .claim("email", email)
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .expiresAt(now.plus(30, ChronoUnit.DAYS))
                 .build();
 
         JwsHeader header = JwsHeader
