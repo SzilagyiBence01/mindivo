@@ -1,9 +1,6 @@
 package mindivo.service;
 
-import mindivo.dto.LoginResponseDto;
-import mindivo.dto.LoginUserDto;
-import mindivo.dto.RegisterUserDto;
-import mindivo.dto.UserResponseDto;
+import mindivo.dto.*;
 
 public interface UserService {
 
@@ -12,4 +9,6 @@ public interface UserService {
     LoginResponseDto login(LoginUserDto dto);
 
     UserResponseDto getAccount(Long userId);
+
+    UserResponseDto updateProfile(Long userId, UpdateUserDto dto);
 }

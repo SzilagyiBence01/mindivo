@@ -1,3 +1,4 @@
+
 package mindivo.mapper;
 
 import mindivo.dto.RegisterUserDto;
@@ -23,12 +24,16 @@ public class UserMapper {
                 user.getId(),
                 user.getFullName(),
                 user.getUserName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getProfilePictureUrl(),
+                user.getBio()
         );
     }
 
     public static void updateEntity(User user, UpdateUserDto dto) {
         user.setFullName(dto.getFullName());
         user.setUserName(dto.getUserName());
+        user.setProfilePictureUrl(dto.getProfilePictureUrl());
+        user.setBio(dto.getBio());
     }
 }

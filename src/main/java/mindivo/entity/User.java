@@ -1,3 +1,4 @@
+
 package mindivo.entity;
 
 import jakarta.persistence.*;
@@ -14,19 +15,20 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="user")
+@Table(name = "user")
 public class User {
+
     // User ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // Full name of the user
-    @Column(name="full_name")
+    @Column(name = "full_name")
     private String fullName;
 
     // Unique user name (nickname)
-    @Column(name="user_name", unique = true, nullable = false)
+    @Column(name = "user_name", unique = true, nullable = false)
     private String userName;
 
     // Hashed password
@@ -36,6 +38,14 @@ public class User {
     // User email address
     @Column(name = "email", unique = true, nullable = false)
     private String email;
+
+    // Profile picture URL
+    @Column(name = "profile_picture_url", length = 2048)
+    private String profilePictureUrl;
+
+    // User biography
+    @Column(name = "bio", columnDefinition = "TEXT")
+    private String bio;
 
     // User own content blocks
     @OneToMany(mappedBy = "author")

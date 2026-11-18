@@ -1,9 +1,11 @@
+
 package mindivo.service.impl;
 
 import lombok.AllArgsConstructor;
 import mindivo.dto.LoginResponseDto;
 import mindivo.dto.LoginUserDto;
 import mindivo.dto.RegisterUserDto;
+import mindivo.dto.UpdateUserDto;
 import mindivo.dto.UserResponseDto;
 import mindivo.entity.User;
 import mindivo.exception.DuplicateResourceException;
@@ -27,20 +29,22 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto register(RegisterUserDto dto) {
 
         // Check if the email is already in use
-        if (userRepository.findByEmail(dto.getEmail() ).isPresent() ) {
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new DuplicateResourceException(
                     "Email is already in use."
             );
         }
 
         // Check if the username is already in use
-        if (userRepository.findByUserName(dto.getUserName() ).isPresent() ) {
-            throw new DuplicateResourceException("Username is already in use.");
+        if (userRepository.findByUserName(dto.getUserName()).isPresent()) {
+            throw new DuplicateResourceException(
+                    "Username is already in use."
+            );
         }
 
         User user = UserMapper.toEntity(dto);
 
-        user.setPassword(passwordEncoder.encode( user.getPassword() ) );
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         User savedUser = userRepository.save(user);
 
@@ -51,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginResponseDto login(LoginUserDto dto) {
 
-        // Check if the username is exist
+        // Find user by email
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() ->
                         new RuntimeException("Invalid email or password.")
@@ -82,12 +86,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getAccount(Long userId) {
 
-        // Check if the id is existed
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found.")
                 );
 
         return UserMapper.toResponse(user);
+    }
+
+    // Update own profile
+    @Override
+    public UserResponseDto updateProfile(Long userId, UpdateUserDto dto) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found.")
+                );
+
+        UserMapper.updateEntity(user, dto);
+
+        User updatedUser = userRepository.save(user);
+
+        return UserMapper.toResponse(updatedUser);
     }
 }

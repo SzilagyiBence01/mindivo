@@ -1,9 +1,11 @@
+
 package mindivo.controller;
 
 import lombok.AllArgsConstructor;
 import mindivo.dto.LoginResponseDto;
 import mindivo.dto.LoginUserDto;
 import mindivo.dto.RegisterUserDto;
+import mindivo.dto.UpdateUserDto;
 import mindivo.dto.UserResponseDto;
 import mindivo.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +20,6 @@ public class UserController {
 
     private final UserService userService;
 
-    //
     // Register
     @PostMapping("/register")
     public UserResponseDto register(
@@ -27,7 +28,6 @@ public class UserController {
         return userService.register(dto);
     }
 
-    //
     // Login
     @PostMapping("/login")
     public LoginResponseDto login(
@@ -36,15 +36,28 @@ public class UserController {
         return userService.login(dto);
     }
 
-    //
     // Get own account
     @GetMapping("/account")
     public UserResponseDto getAccount(
             @AuthenticationPrincipal Jwt jwt
     ) {
-        Long userId = Long.valueOf(Objects.requireNonNull(jwt.getSubject()));
+        Long userId = Long.valueOf(
+                Objects.requireNonNull(jwt.getSubject())
+        );
 
         return userService.getAccount(userId);
     }
 
+    // Update own profile
+    @PutMapping("/account/profile")
+    public UserResponseDto updateProfile(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody UpdateUserDto dto
+    ) {
+        Long userId = Long.valueOf(
+                Objects.requireNonNull(jwt.getSubject())
+        );
+
+        return userService.updateProfile(userId, dto);
+    }
 }
